@@ -1,0 +1,64 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-10-02 10:07:37.897435",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "google_sheet_id",
+  "google_sheet_tab_id",
+  "section_break_ajge",
+  "google_sheet_cell_settings"
+ ],
+ "fields": [
+  {
+   "description": "e.g. google sheet url: https://docs.google.com/spreadsheets/d/14eF3FYRh0pxjyiUwKn_tMRSgh8Xd-6ld2Na7TRjlEKk<br>\nThen this google sheet id is <b>\"14eF3FYRh0pxjyiUwKn_tMRSgh8Xd-6ld2Na7TRjlEKk\"</b>",
+   "fieldname": "google_sheet_id",
+   "fieldtype": "Data",
+   "label": "Google Sheet Id"
+  },
+  {
+   "description": "e.g. google sheet url: https://docs.google.com/spreadsheets/d/14eF3FYRh0pxjyiUwKn_tMRSgh8Xd-6ld2Na7TRjlEKk/edit?pli=1&amp;gid=223053198<br>\nThen this google sheet tab id is <b>\"223053198\"</b>",
+   "fieldname": "google_sheet_tab_id",
+   "fieldtype": "Data",
+   "label": "Google Sheet Tab Id"
+  },
+  {
+   "fieldname": "google_sheet_cell_settings",
+   "fieldtype": "Table",
+   "label": "Google Sheet Cell Settings",
+   "options": "Google Sheet Cell Settings"
+  },
+  {
+   "fieldname": "section_break_ajge",
+   "fieldtype": "Section Break"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-10-02 10:20:18.925717",
+ "modified_by": "Administrator",
+ "module": "Google Sheet Map",
+ "name": "Google Sheet Map",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
