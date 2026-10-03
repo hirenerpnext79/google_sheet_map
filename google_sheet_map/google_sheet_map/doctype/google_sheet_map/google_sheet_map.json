@@ -1,10 +1,13 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "naming_series:",
  "creation": "2026-10-02 10:07:37.897435",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "naming_series",
+  "app_script_deployment_id",
   "google_sheet_id",
   "google_sheet_tab_id",
   "section_break_ajge",
@@ -15,12 +18,15 @@
    "description": "e.g. google sheet url: https://docs.google.com/spreadsheets/d/14eF3FYRh0pxjyiUwKn_tMRSgh8Xd-6ld2Na7TRjlEKk<br>\nThen this google sheet id is <b>\"14eF3FYRh0pxjyiUwKn_tMRSgh8Xd-6ld2Na7TRjlEKk\"</b>",
    "fieldname": "google_sheet_id",
    "fieldtype": "Data",
-   "label": "Google Sheet Id"
+   "in_list_view": 1,
+   "label": "Google Sheet Id",
+   "reqd": 1
   },
   {
    "description": "e.g. google sheet url: https://docs.google.com/spreadsheets/d/14eF3FYRh0pxjyiUwKn_tMRSgh8Xd-6ld2Na7TRjlEKk/edit?pli=1&amp;gid=223053198<br>\nThen this google sheet tab id is <b>\"223053198\"</b>",
    "fieldname": "google_sheet_tab_id",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Google Sheet Tab Id"
   },
   {
@@ -32,15 +38,28 @@
   {
    "fieldname": "section_break_ajge",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "GSM-.#####"
+  },
+  {
+   "fieldname": "app_script_deployment_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "App Script Deployment ID"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-02 10:20:18.925717",
+ "modified": "2026-10-03 10:28:02.853587",
  "modified_by": "Administrator",
  "module": "Google Sheet Map",
  "name": "Google Sheet Map",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {
