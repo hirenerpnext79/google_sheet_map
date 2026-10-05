@@ -1,0 +1,101 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:period",
+ "creation": "2026-10-05 13:53:52.646867",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "period",
+  "keyword",
+  "custom_label",
+  "column_break_yfyj",
+  "from_date",
+  "to_date",
+  "section_break_oocv",
+  "description"
+ ],
+ "fields": [
+  {
+   "fieldname": "period",
+   "fieldtype": "Data",
+   "label": "Period",
+   "unique": 1
+  },
+  {
+   "fieldname": "keyword",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Keyword",
+   "options": "Last 365 days\nLast 90 days\nLast 30 days\nLast 7 days\nPrevious Quarter\nCurrent Quarter\nCurrent Month\nToday\nYesterday\nPrevious Month\nYTD\nCustom",
+   "reqd": 1
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "From Date",
+   "reqd": 1,
+   "sort_options": 1
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "To Date",
+   "reqd": 1,
+   "sort_options": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Long Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "column_break_yfyj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_oocv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval:doc.keyword == 'Custom'",
+   "fieldname": "custom_label",
+   "fieldtype": "Data",
+   "label": "Custom Label"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-10-05 15:22:07.031388",
+ "modified_by": "Administrator",
+ "module": "Google Sheet Map",
+ "name": "Google Sheet Period Master",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "period"
+}
