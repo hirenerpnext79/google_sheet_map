@@ -155,68 +155,6 @@ def update_google_sheet_data(doc, headers, data):
 	handle_google_api_error(res, "Error writing to Google Sheet")
 
 # ---------------------------------------------------------
-# APPS SCRIPT WEB APP METHODS
-# ---------------------------------------------------------
-def read_via_web_app(doc, url, ranges):
-	payload = {
-		"action": "read",
-		"sheet_id": doc.google_sheet_id,
-		"tab_id": doc.google_sheet_tab_id,
-		"ranges": ranges
-	}
-	
-	try:
-		res = requests.post(url, json=payload)
-		res.raise_for_status()
-	except Exception as e:
-		frappe.throw(f"Error communicating with Google Web App: {str(e)}")
-		
-	response_data = res.json()
-	if response_data.get("status") == "error":
-		frappe.throw(f"Error from Google Web App: {response_data.get('message')}")
-		
-	data = response_data.get("data", {})
-	
-	for row in doc.get("google_sheet_cell_settings"):
-		if row.cell in data:
-			row.value = data[row.cell]
-			
-	doc.save()
-
-def write_via_web_app(doc, url):
-	data = []
-	for row in doc.get("google_sheet_cell_settings"):
-		if not row.cell:
-			continue
-		values = get_values_for_row(row)
-		if values:
-			if row.output_type == 'List':
-				data.append({"cell": row.cell, "values": values, "value": ""})
-			else:
-				data.append({"cell": row.cell, "value": row.value})
-
-	        
-	if not data:
-		return
-		
-	payload = {
-		"action": "write",
-		"sheet_id": doc.google_sheet_id,
-		"tab_id": doc.google_sheet_tab_id,
-		"data": data
-	}
-	
-	try:
-		res = requests.post(url, json=payload, allow_redirects=True)
-		res.raise_for_status()
-	except Exception as e:
-		frappe.throw(f"Error communicating with Google Web App: {str(e)}")
-		
-	response_data = res.json()
-	if response_data.get("status") == "error":
-		frappe.throw(f"Error from Google Web App: {response_data.get('message')}")
-
-# ---------------------------------------------------------
 # WHITELISTED ENTRY POINTS
 # ---------------------------------------------------------
 @frappe.whitelist()
@@ -227,16 +165,10 @@ def read_from_google_sheet(docname):
 	if not ranges:
 		return
 		
-	deployment_id = doc.get("app_script_deployment_id")
-	
-	if deployment_id:
-		script_url = f"https://script.google.com/macros/s/{deployment_id}/exec"
-		read_via_web_app(doc, script_url, ranges)
-	else:
-		headers = get_google_headers()
-		sheet_name = get_sheet_name(doc, headers)
-		value_ranges = fetch_google_sheet_data(doc, headers, sheet_name, ranges)
-		map_data_to_doc(doc, value_ranges)
+	headers = get_google_headers()
+	sheet_name = get_sheet_name(doc, headers)
+	value_ranges = fetch_google_sheet_data(doc, headers, sheet_name, ranges)
+	map_data_to_doc(doc, value_ranges)
 		
 	return "Success"
 
@@ -244,17 +176,11 @@ def read_from_google_sheet(docname):
 def write_to_google_sheet(docname):
 	doc = frappe.get_doc("Google Sheet Map", docname)
 	
-	deployment_id = doc.get("app_script_deployment_id")
-	
-	if deployment_id:
-		script_url = f"https://script.google.com/macros/s/{deployment_id}/exec"
-		write_via_web_app(doc, script_url)
-	else:
-		headers = get_google_headers()
-		sheet_name = get_sheet_name(doc, headers)
-		data = build_update_payload(doc, sheet_name)
-		if not data:
-			return
-		update_google_sheet_data(doc, headers, data)
+	headers = get_google_headers()
+	sheet_name = get_sheet_name(doc, headers)
+	data = build_update_payload(doc, sheet_name)
+	if not data:
+		return
+	update_google_sheet_data(doc, headers, data)
 		
 	return "Success"
