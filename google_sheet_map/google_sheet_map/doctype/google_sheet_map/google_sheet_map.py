@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import json
+import re
 import requests
 import frappe
 from frappe.model.document import Document
@@ -27,10 +28,40 @@ class GoogleSheetMap(Document):
 			period_doc = frappe.get_cached_doc("Google Sheet Period Master", row.period)
 			if period_doc.from_date and period_doc.to_date:
 				condition = f"{row.date_field} BETWEEN '{period_doc.from_date}' AND '{period_doc.to_date}'"
-				if "where" in query.lower():
-					query += f" AND {condition}"
+				clean_query = query.strip()
+				has_semicolon = clean_query.endswith(";")
+				if has_semicolon:
+					clean_query = clean_query[:-1].rstrip()
+
+				clause_pattern = re.compile(
+					r'\b(GROUP\s+BY|HAVING|WINDOW|ORDER\s+BY|LIMIT|PROCEDURE|FOR\s+UPDATE|LOCK\s+IN\s+SHARE\s+MODE)\b',
+					re.IGNORECASE
+				)
+				where_matches = list(re.finditer(r'\bWHERE\b', clean_query, re.IGNORECASE))
+
+				if where_matches:
+					last_where = where_matches[-1]
+					trailing_match = clause_pattern.search(clean_query, last_where.end())
+					if trailing_match:
+						insert_pos = trailing_match.start()
+						before = clean_query[:insert_pos].rstrip()
+						after = clean_query[insert_pos:].lstrip()
+						query = f"{before} AND {condition}\n{after}"
+					else:
+						query = f"{clean_query} AND {condition}"
 				else:
-					query += f" WHERE {condition}"
+					trailing_match = clause_pattern.search(clean_query)
+					if trailing_match:
+						insert_pos = trailing_match.start()
+						before = clean_query[:insert_pos].rstrip()
+						after = clean_query[insert_pos:].lstrip()
+						query = f"{before}\nWHERE {condition}\n{after}"
+					else:
+						query = f"{clean_query}\nWHERE {condition}"
+
+				if has_semicolon:
+					query = f"{query.rstrip()};"
+
 		return query
 
 	def _process_query_result(self, row, result):
